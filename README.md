@@ -1,5 +1,6 @@
-<h1 align=center>esbuild plugin for styled components</h1>
+![esbuild-plugin-styled-components-cover](https://github.com/appzic/esbuild-plugin-styled-components/assets/64678612/235d077d-cf05-4e84-8924-28ca5ba2075c)
 
+<h1 align=center>esbuild plugin for styled components</h1>
 
 <p align="center" style="align: center;">
     <a href="https://github.com/appzic/esbuild-plugin-styled-components/blob/main/LICENSE">
@@ -7,7 +8,6 @@
     </a>
 </p>
 
-![esbuild-plugin-styled-components-cover](https://github.com/appzic/esbuild-plugin-styled-components/assets/64678612/235d077d-cf05-4e84-8924-28ca5ba2075c)
 
 ## How to Install
 ```bash
