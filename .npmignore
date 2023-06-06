@@ -1,0 +1,10 @@
+# ignore everything
+*
+
+# include these:
+!index.js
+!LICENSE
+!README.md
+
+# exclude hidden files from the includes:
+.*
