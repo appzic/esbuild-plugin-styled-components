@@ -3,6 +3,12 @@
 <h1 align=center>esbuild plugin for styled components</h1>
 
 <p align="center" style="align: center;">
+    <a href="https://www.npmjs.com/package/esbuild-plugin-styled-components">
+        <img alt="npm" src="https://img.shields.io/npm/v/esbuild-plugin-styled-components">
+    </a>
+    <a href="https://www.npmjs.com/package/esbuild-plugin-styled-components">
+        <img alt="npm" src="https://img.shields.io/npm/dw/esbuild-plugin-styled-components">
+    </a>
     <a href="https://github.com/appzic/esbuild-plugin-styled-components/blob/main/LICENSE">
         <img alt="GitHub" src="https://img.shields.io/github/license/appzic/esbuild-plugin-styled-components">
     </a>
