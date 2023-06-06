@@ -20,5 +20,9 @@
   "bugs": {
     "url": "https://github.com/appzic/esbuild-plugin-styled-components/issues"
   },
-  "homepage": "https://github.com/appzic/esbuild-plugin-styled-components#readme"
+  "homepage": "https://github.com/appzic/esbuild-plugin-styled-components#readme",
+  "dependencies": {
+    "@babel/core": "^7.22.1",
+    "babel-plugin-styled-components": "^2.1.3"
+  }
 }
