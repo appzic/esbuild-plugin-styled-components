@@ -1,0 +1,24 @@
+{
+  "name": "esbuild-plugin-styled-components",
+  "version": "1.0.0",
+  "description": "esbuild plugin for styled components",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/appzic/esbuild-plugin-styled-components.git"
+  },
+  "keywords": [
+    "esbuild",
+    "plugin",
+    "styled-components"
+  ],
+  "author": "Yasitha Nadeeshan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/appzic/esbuild-plugin-styled-components/issues"
+  },
+  "homepage": "https://github.com/appzic/esbuild-plugin-styled-components#readme"
+}
