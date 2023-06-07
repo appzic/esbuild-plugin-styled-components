@@ -28,10 +28,22 @@ import styledComponentsPlugin from "esbuild-plugin-styled-components";
 
 await esbuild.build({
     ...
-    plugins: [styledComponentsPlugin],
+    plugins: [
+        styledComponentsPlugin({
+            // ssr: false,
+            // displayName: false,
+            // fileName: false,
+            // meaninglessFileNames: [],
+            // minify: true,
+            // transpileTemplateLiterals: false,
+            // pure: false,
+        })
+    ],
     ...
 })
 ```
+
+More details about options https://styled-components.com/docs/tooling
 
 ## Contributing
 
