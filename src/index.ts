@@ -1,7 +1,9 @@
-import babel from "@babel/core";
+import { readFile } from "node:fs/promises";
+
 import styled from "babel-plugin-styled-components";
-import fs from "node:fs";
-import { ParserPlugin } from "@babel/parser/typings/babel-parser"
+import { transformAsync } from "@babel/core";
+import { type ParserPlugin } from "@babel/parser";
+import { type Plugin } from "esbuild";
 
 // https://styled-components.com/docs/tooling#usage
 interface Options {
@@ -26,7 +28,7 @@ const esbuildPluginStyledComponents = ({
     transpileTemplateLiterals = false,
     pure = false,
     topLevelImportPaths = [],
-}: Options) => {
+}: Options): Plugin => {
 
     return {
         name: "styled-components",
@@ -34,7 +36,7 @@ const esbuildPluginStyledComponents = ({
             const root = process.cwd();
             onLoad({ filter: new RegExp(filter) }, async (args) => {
                 // Read in the file
-                const code = await fs.promises.readFile(args.path, "utf8");
+                const code = await readFile(args.path, "utf8");
 
                 // Determine plugins to use
                 const plugins = [
@@ -51,7 +53,7 @@ const esbuildPluginStyledComponents = ({
 
                 // Run the code through babel
                 const map = initialOptions.sourcemap !== false;
-                const result = await babel.transformAsync(code, {
+                const result = await transformAsync(code, {
                     babelrc: false,
                     configFile: false,
                     ast: false,
@@ -77,6 +79,10 @@ const esbuildPluginStyledComponents = ({
                     }]],
                     sourceMaps: map,
                 });
+
+                // If babel fails to return, throw an error
+                if (!result)
+                    throw new Error(`Babel transformation failed for ${args.path}`);
 
                 // Return the transformed code to esbuild
                 return {
