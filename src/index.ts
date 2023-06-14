@@ -9,10 +9,11 @@ interface Options {
     ssr?: boolean,
     displayName?: boolean,
     fileName?: boolean,
-    meaninglessFileNames?: Array<string>,
+    meaninglessFileNames?: string[],
     minify?: boolean,
     transpileTemplateLiterals?: boolean,
     pure?: boolean,
+    topLevelImportPaths?: string[];
 }
 
 const esbuildPluginStyledComponents = ({
@@ -24,6 +25,7 @@ const esbuildPluginStyledComponents = ({
     minify = true,
     transpileTemplateLiterals = false,
     pure = false,
+    topLevelImportPaths = [],
 }: Options) => {
 
     return {
@@ -71,6 +73,7 @@ const esbuildPluginStyledComponents = ({
                         minify,
                         transpileTemplateLiterals,
                         pure,
+                        topLevelImportPaths,
                     }]],
                     sourceMaps: map,
                 });
