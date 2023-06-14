@@ -5,6 +5,7 @@ import { ParserPlugin } from "@babel/parser/typings/babel-parser"
 
 // https://styled-components.com/docs/tooling#usage
 interface Options {
+    filter?: string | RegExp;
     ssr?: boolean,
     displayName?: boolean,
     fileName?: boolean,
@@ -15,6 +16,7 @@ interface Options {
 }
 
 const esbuildPluginStyledComponents = ({
+    filter = "\\.[tj]sx$",
     ssr = false,
     displayName = false,
     fileName = false,
@@ -28,21 +30,24 @@ const esbuildPluginStyledComponents = ({
         name: "styled-components",
         setup({ onLoad }) {
             const root = process.cwd();
-            onLoad({ filter: /\.[tj]sx$/ }, async (args) => {
-                let code = await fs.promises.readFile(args.path, "utf8");
-                let plugins = [
+            onLoad({ filter: new RegExp(filter) }, async (args) => {
+                // Read in the file
+                const code = await fs.promises.readFile(args.path, "utf8");
+
+                // Determine plugins to use
+                const plugins = [
                     "importMeta",
                     "topLevelAwait",
                     "classProperties",
                     "classPrivateProperties",
                     "classPrivateMethods",
-                    "jsx",
-                ] as Array<ParserPlugin>;
-                let loader = "jsx";
-                if (args.path.endsWith(".tsx")) {
-                    plugins.push("typescript");
-                    loader = "tsx";
-                }
+                ] as ParserPlugin[];
+                const isJsx = /\.[tj]sx$/.test(args.path);
+                if (isJsx) plugins.push("jsx");
+                const isTs = /\.tsx?$/.test(args.path);
+                if (isTs) plugins.push("typescript");
+
+                // Run the code through babel
                 const result = await babel.transformAsync(code, {
                     babelrc: false,
                     configFile: false,
@@ -68,12 +73,14 @@ const esbuildPluginStyledComponents = ({
                     }]],
                     sourceMaps: false,
                 });
+
+                // Return the transformed code to esbuild
                 return {
                     contents:
                         result.code +
                         `//# sourceMappingURL=data:application/json;base64,` +
                         Buffer.from(JSON.stringify(result.map)).toString("base64"),
-                    loader,
+                    loader: `${isTs ? "ts" : "js"}${isJsx ? "x" : ""}`,
                 };
             });
         },
