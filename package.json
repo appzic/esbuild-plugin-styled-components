@@ -8,7 +8,7 @@
 		"dev": "tsc --watch",
 		"build": "npm run clean && tsc",
 		"clean": "rimraf dist",
-		"format": "prettier --write ."
+		"format": "prettier --write . --ignore-unknown"
 	},
 	"repository": {
 		"type": "git",
