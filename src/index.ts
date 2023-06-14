@@ -28,7 +28,7 @@ const esbuildPluginStyledComponents = ({
 
     return {
         name: "styled-components",
-        setup({ onLoad }) {
+        setup({ onLoad, initialOptions }) {
             const root = process.cwd();
             onLoad({ filter: new RegExp(filter) }, async (args) => {
                 // Read in the file
@@ -48,6 +48,7 @@ const esbuildPluginStyledComponents = ({
                 if (isTs) plugins.push("typescript");
 
                 // Run the code through babel
+                const map = initialOptions.sourcemap !== false;
                 const result = await babel.transformAsync(code, {
                     babelrc: false,
                     configFile: false,
@@ -71,15 +72,14 @@ const esbuildPluginStyledComponents = ({
                         transpileTemplateLiterals,
                         pure,
                     }]],
-                    sourceMaps: false,
+                    sourceMaps: map,
                 });
 
                 // Return the transformed code to esbuild
                 return {
-                    contents:
-                        result.code +
-                        `//# sourceMappingURL=data:application/json;base64,` +
-                        Buffer.from(JSON.stringify(result.map)).toString("base64"),
+                    contents: result.code + (result.map && map
+                        ? `//# sourceMappingURL=data:application/json;base64,${Buffer.from(JSON.stringify(result.map)).toString("base64")}`
+                        : ""),
                     loader: `${isTs ? "ts" : "js"}${isJsx ? "x" : ""}`,
                 };
             });
