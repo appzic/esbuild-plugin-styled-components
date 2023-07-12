@@ -2,7 +2,7 @@
 *
 
 # include these:
-!index.js
+!dist
 !LICENSE
 !README.md
 
