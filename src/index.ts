@@ -1,105 +1,84 @@
-import { readFile } from "node:fs/promises";
-
+import babel from "@babel/core";
 import styled from "babel-plugin-styled-components";
-import { transformAsync } from "@babel/core";
-import { type ParserPlugin } from "@babel/parser";
-import { type Plugin } from "esbuild";
+import fs from "node:fs";
+import { ParserPlugin } from "@babel/parser/typings/babel-parser"
 
 // https://styled-components.com/docs/tooling#usage
 interface Options {
-	filter?: string | RegExp;
-	ssr?: boolean;
-	displayName?: boolean;
-	fileName?: boolean;
-	meaninglessFileNames?: string[];
-	minify?: boolean;
-	transpileTemplateLiterals?: boolean;
-	pure?: boolean;
-	topLevelImportPaths?: string[];
+    ssr?: boolean,
+    displayName?: boolean,
+    fileName?: boolean,
+    meaninglessFileNames?: Array<string>,
+    minify?: boolean,
+    transpileTemplateLiterals?: boolean,
+    pure?: boolean,
 }
 
 const esbuildPluginStyledComponents = ({
-	filter = "\\.[tj]sx$",
-	ssr = false,
-	displayName = false,
-	fileName = false,
-	meaninglessFileNames = [],
-	minify = true,
-	transpileTemplateLiterals = false,
-	pure = false,
-	topLevelImportPaths = [],
-}: Options): Plugin => ({
-	name: "styled-components",
-	setup: ({ onLoad, initialOptions }) => {
-		const root = process.cwd();
-		onLoad({ filter: new RegExp(filter) }, async (args) => {
-			// Read in the file
-			const code = await readFile(args.path, "utf8");
+    ssr = false,
+    displayName = false,
+    fileName = false,
+    meaninglessFileNames = [],
+    minify = true,
+    transpileTemplateLiterals = false,
+    pure = false,
+}: Options) => {
 
-			// Determine plugins to use
-			const plugins = [
-				"importMeta",
-				"topLevelAwait",
-				"classProperties",
-				"classPrivateProperties",
-				"classPrivateMethods",
-			] as ParserPlugin[];
-			const isJsx = /\.[tj]sx$/.test(args.path);
-			if (isJsx) plugins.push("jsx");
-			const isTs = /\.tsx?$/.test(args.path);
-			if (isTs) plugins.push("typescript");
-
-			// Run the code through babel
-			const map = initialOptions.sourcemap !== false;
-			const result = await transformAsync(code, {
-				babelrc: false,
-				configFile: false,
-				ast: false,
-				root,
-				filename: args.path,
-				parserOpts: {
-					sourceType: "module",
-					allowAwaitOutsideFunction: true,
-					plugins,
-				},
-				generatorOpts: {
-					decoratorsBeforeExport: true,
-				},
-				plugins: [
-					[
-						styled,
-						{
-							ssr,
-							displayName,
-							fileName,
-							meaninglessFileNames,
-							minify,
-							transpileTemplateLiterals,
-							pure,
-							topLevelImportPaths,
-						},
-					],
-				],
-				sourceMaps: map,
-			});
-
-			// If babel fails to return, throw an error
-			if (!result)
-				throw new Error(`Babel transformation failed for ${args.path}`);
-
-			// Return the transformed code to esbuild
-			return {
-				contents:
-					result.code +
-					(result.map && map
-						? `//# sourceMappingURL=data:application/json;base64,${Buffer.from(
-								JSON.stringify(result.map)
-						  ).toString("base64")}`
-						: ""),
-				loader: `${isTs ? "ts" : "js"}${isJsx ? "x" : ""}`,
-			};
-		});
-	},
-});
+    return {
+        name: "styled-components",
+        setup({ onLoad }) {
+            const root = process.cwd();
+            onLoad({ filter: /\.[tj]sx$/ }, async (args) => {
+                let code = await fs.promises.readFile(args.path, "utf8");
+                let plugins = [
+                    "importMeta",
+                    "topLevelAwait",
+                    "classProperties",
+                    "classPrivateProperties",
+                    "classPrivateMethods",
+                    "jsx",
+                ] as Array<ParserPlugin>;
+                let loader = "jsx";
+                if (args.path.endsWith(".tsx")) {
+                    plugins.push("typescript");
+                    loader = "tsx";
+                }
+                const result = await babel.transformAsync(code, {
+                    babelrc: false,
+                    configFile: false,
+                    ast: false,
+                    root,
+                    filename: args.path,
+                    parserOpts: {
+                        sourceType: "module",
+                        allowAwaitOutsideFunction: true,
+                        plugins,
+                    },
+                    generatorOpts: {
+                        decoratorsBeforeExport: true,
+                    },
+                    plugins: [[styled, {
+                        ssr,
+                        displayName,
+                        fileName,
+                        meaninglessFileNames,
+                        minify,
+                        transpileTemplateLiterals,
+                        pure,
+                    }]],
+                    sourceMaps: false,
+                });
+                return {
+                    contents:
+                        result.code +
+                        `//# sourceMappingURL=data:application/json;base64,` +
+                        Buffer.from(JSON.stringify(result.map)).toString("base64"),
+                    loader,
+                };
+            });
+        },
+    };
+}
 
 export default esbuildPluginStyledComponents;
+
