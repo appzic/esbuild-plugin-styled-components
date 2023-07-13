@@ -30,13 +30,15 @@ await esbuild.build({
     ...
     plugins: [
         styledComponentsPlugin({
-            // ssr: false,
-            // displayName: false,
-            // fileName: false,
-            // meaninglessFileNames: [],
-            // minify: true,
-            // transpileTemplateLiterals: false,
-            // pure: false,
+            // filter: "\\.[tj]sx$";               <-- Optional, type = string | RegExp
+            // ssr: false;                         <-- Optional, type = boolean
+            // displayName: false;                 <-- Optional, type = boolean
+            // fileName: false;                    <-- Optional, type = boolean
+            // meaninglessFileNames: [];           <-- Optional, type = string[]
+            // minify: true;                       <-- Optional, type = boolean
+            // transpileTemplateLiterals: false;   <-- Optional, type = boolean
+            // pure: false;                        <-- Optional, type = boolean
+            // topLevelImportPaths: [];            <-- Optional, type = string[]
         })
     ],
     ...
