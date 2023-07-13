@@ -51,6 +51,12 @@ More details about options https://styled-components.com/docs/tooling
 
 We welcome contributions from the community! Please take a look at our [CONTRIBUTING.md](CONTRIBUTING.md) file for more information on how to get started. We appreciate all kinds of contributions, from bug reports and feature requests to code contributions and documentation improvements. Thank you for considering contributing to our project!
 
+## Contributors
+
+<a href="https://github.com/appzic/esbuild-plugin-styled-components/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=appzic/esbuild-plugin-styled-components" />
+</a>
+
 ## License
 
 Licensed under the [MIT](LICENSE) License.
