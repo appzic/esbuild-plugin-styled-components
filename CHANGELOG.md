@@ -1,5 +1,11 @@
 # esbuild-plugin-styled-components
 
+## 2.2.2
+
+### Patch Changes
+
+- Add type declaration file
+
 ## 2.2.1
 
 ### Patch Changes
