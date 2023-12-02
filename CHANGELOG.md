@@ -1,5 +1,11 @@
 # esbuild-plugin-styled-components
 
+## 3.0.0
+
+### Major Changes
+
+- Added support namespace property
+
 ## 2.2.2
 
 ### Patch Changes
