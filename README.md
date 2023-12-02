@@ -30,8 +30,8 @@ await esbuild.build({
     ...
     plugins: [
         styledComponentsPlugin({
-            // filter: "\\.[tj]sx$";               <-- Optional, type = string | RegExp
-            // ssr: false;                         <-- Optional, type = boolean
+            // filter: "\\.[tj]sx?$";              <-- Optional, type = string | RegExp
+            // ssr: true;                          <-- Optional, type = boolean
             // displayName: false;                 <-- Optional, type = boolean
             // fileName: false;                    <-- Optional, type = boolean
             // meaninglessFileNames: [];           <-- Optional, type = string[]
@@ -39,6 +39,7 @@ await esbuild.build({
             // transpileTemplateLiterals: false;   <-- Optional, type = boolean
             // pure: false;                        <-- Optional, type = boolean
             // topLevelImportPaths: [];            <-- Optional, type = string[]
+            // namespace: undefined;               <-- Optional, type = string
         })
     ],
     ...

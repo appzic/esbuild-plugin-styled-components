@@ -1,7 +1,5 @@
-import { readFile } from "node:fs/promises";
-
 import styled from "babel-plugin-styled-components";
-import { transformAsync } from "@babel/core";
+import { transformFileAsync } from "@babel/core";
 import { type ParserPlugin } from "@babel/parser";
 import { type Plugin } from "esbuild";
 
@@ -16,11 +14,12 @@ interface Options {
 	transpileTemplateLiterals?: boolean;
 	pure?: boolean;
 	topLevelImportPaths?: string[];
+	namespace?: string;
 }
 
 const esbuildPluginStyledComponents = ({
-	filter = "\\.[tj]sx$",
-	ssr = false,
+	filter = "\\.[tj]sx?$",
+	ssr = true,
 	displayName = false,
 	fileName = false,
 	meaninglessFileNames = [],
@@ -28,14 +27,12 @@ const esbuildPluginStyledComponents = ({
 	transpileTemplateLiterals = false,
 	pure = false,
 	topLevelImportPaths = [],
+	namespace,
 }: Options): Plugin => ({
 	name: "styled-components",
 	setup: ({ onLoad, initialOptions }) => {
 		const root = process.cwd();
 		onLoad({ filter: new RegExp(filter) }, async (args) => {
-			// Read in the file
-			const code = await readFile(args.path, "utf8");
-
 			// Determine plugins to use
 			const plugins = [
 				"importMeta",
@@ -51,7 +48,7 @@ const esbuildPluginStyledComponents = ({
 
 			// Run the code through babel
 			const map = initialOptions.sourcemap !== false;
-			const result = await transformAsync(code, {
+			const result = await transformFileAsync(args.path,{
 				babelrc: false,
 				configFile: false,
 				ast: false,
@@ -77,6 +74,7 @@ const esbuildPluginStyledComponents = ({
 							transpileTemplateLiterals,
 							pure,
 							topLevelImportPaths,
+							namespace,
 						},
 					],
 				],
