@@ -48,7 +48,7 @@ const esbuildPluginStyledComponents = ({
 
 			// Run the code through babel
 			const map = initialOptions.sourcemap !== false;
-			const result = await transformFileAsync(args.path,{
+			const result = await transformFileAsync(args.path, {
 				babelrc: false,
 				configFile: false,
 				ast: false,
