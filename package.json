@@ -9,7 +9,8 @@
 		"dev": "tsc --watch",
 		"build": "npm run clean && tsc",
 		"clean": "rimraf dist",
-		"format": "prettier --write . --ignore-unknown"
+		"format": "prettier --write . --ignore-unknown",
+		"prepublishOnly": "npm run build"
 	},
 	"repository": {
 		"type": "git",
