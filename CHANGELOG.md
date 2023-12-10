@@ -1,5 +1,11 @@
 # esbuild-plugin-styled-components
 
+## 3.0.1
+
+### Patch Changes
+
+- Added prepublishOnly script to ensure build step is not forgotten
+
 ## 3.0.0
 
 ### Major Changes
